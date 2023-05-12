@@ -1,0 +1,347 @@
+{
+    "openapi" : "3.0.1",
+    "info" : {
+      "contact" : { },
+      "license" : { }
+    },
+    "paths" : {
+        "/products/{product_id}" : {
+          "get" : {
+            "operationId" : "getProduct",
+            "parameters" : [ {
+              "name" : "Authorization",
+              "in" : "header",
+              "schema" : {
+                "type" : "string"
+              }
+            }, {
+              "name" : "product_id",
+              "in" : "path",
+              "required" : true,
+              "schema" : {
+                "type" : "integer",
+                "format" : "int64"
+              }
+            } ],
+            "responses" : {
+              "default" : {
+                "description" : "default response",
+                "content" : {
+                  "application/json" : {
+                    "schema" : {
+                      "$ref" : "#/components/schemas/ProductViewResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/products" : {
+          "get" : {
+            "operationId" : "getProductList",
+            "parameters" : [ {
+              "name" : "Authorization",
+              "in" : "header",
+              "schema" : {
+                "type" : "string"
+              }
+            } ],
+            "responses" : {
+              "default" : {
+                "description" : "default response",
+                "content" : {
+                  "application/json" : {
+                    "schema" : {
+                      "$ref" : "#/components/schemas/ProductListResponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "post" : {
+            "operationId" : "createProduct",
+            "parameters" : [ {
+              "name" : "Authorization",
+              "in" : "header",
+              "schema" : {
+                "type" : "string"
+              }
+            } ],
+            "requestBody" : {
+              "content" : {
+                "*/*" : {
+                  "schema" : {
+                    "$ref" : "#/components/schemas/ProductForm"
+                  }
+                }
+              }
+            },
+            "responses" : {
+              "default" : {
+                "description" : "default response",
+                "content" : {
+                  "application/json" : {
+                    "schema" : {
+                      "$ref" : "#/components/schemas/ProductViewResponse"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/test" : {
+          "get" : {
+            "operationId" : "testHelloWorld",
+            "responses" : {
+              "default" : {
+                "description" : "default response",
+                "content" : {
+                  "application/json" : {
+                    "schema" : {
+                      "type" : "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "components" : {
+        "schemas" : {
+          "AddressView" : {
+            "required" : [ "city", "id", "lat", "lng", "state", "street1", "zipcode" ],
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "integer",
+                "format" : "int64"
+              },
+              "street1" : {
+                "type" : "string"
+              },
+              "street2" : {
+                "type" : "string"
+              },
+              "zipcode" : {
+                "type" : "string"
+              },
+              "city" : {
+                "type" : "string"
+              },
+              "state" : {
+                "type" : "string"
+              },
+              "lat" : {
+                "type" : "number",
+                "format" : "double"
+              },
+              "lng" : {
+                "type" : "number",
+                "format" : "double"
+              }
+            }
+          },
+          "ApiError" : {
+            "type" : "object",
+            "properties" : {
+              "code" : {
+                "type" : "string"
+              },
+              "msg" : {
+                "type" : "string"
+              }
+            }
+          },
+          "ApiMeta" : {
+            "type" : "object",
+            "properties" : {
+              "nextCursor" : {
+                "type" : "string"
+              }
+            }
+          },
+          "CompanyView" : {
+            "required" : [ "id", "mills", "sources", "name" ],
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "integer",
+                "format" : "int64"
+              },
+              "name" : {
+                "type" : "string"
+              },
+              "mills" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/MillView"
+                }
+              },
+              "sources" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/SourceView"
+                }
+              }
+            }
+          },
+          "ApiSuccessCompanyView" : {
+            "type" : "object",
+            "properties" : {
+              "result" : {
+                "$ref" : "#/components/schemas/IApiObject"
+              },
+              "meta" : {
+                "$ref" : "#/components/schemas/ApiMeta"
+              },
+              "error" : {
+                "$ref" : "#/components/schemas/ApiError"
+              }
+            }
+          },
+          "IApiObject" : {
+            "type" : "object"
+          },
+          "ApiSuccess" : {
+            "type" : "object",
+            "properties" : {
+              "result" : {
+                "$ref" : "#/components/schemas/IApiObject"
+              },
+              "meta" : {
+                "$ref" : "#/components/schemas/ApiMeta"
+              },
+              "error" : {
+                "$ref" : "#/components/schemas/ApiError"
+              }
+            }
+          },
+          "ProductAttrView" : {
+            "required" : [ "attrType", "displayName", "id", "unit" ],
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "integer",
+                "format" : "int64"
+              },
+              "displayName" : {
+                "type" : "string"
+              },
+              "attrType" : {
+                "type" : "string",
+                "enum" : [ "INT", "DECIMAL", "ENUM" ]
+              },
+              "unit" : {
+                "type" : "string"
+              }
+            }
+          },
+          "ProductView" : {
+            "required" : [ "attrs", "description", "displayName", "id" ],
+            "type" : "object",
+            "properties" : {
+              "id" : {
+                "type" : "integer",
+                "format" : "int64"
+              },
+              "displayName" : {
+                "type" : "string"
+              },
+              "description" : {
+                "type" : "string"
+              },
+              "attrs" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ProductAttrView"
+                }
+              },
+              "units" : {
+                "type" : "string"
+              }
+            }
+          },
+          "ProductViewResponse" : {
+            "required" : [ "error", "meta" ],
+            "type" : "object",
+            "properties" : {
+              "meta" : {
+                "$ref" : "#/components/schemas/ApiMeta"
+              },
+              "error" : {
+                "$ref" : "#/components/schemas/ApiError"
+              },
+              "result" : {
+                "$ref" : "#/components/schemas/ProductView"
+              }
+            }
+          },
+          "ProductListResponse" : {
+            "required" : [ "error", "meta", "result" ],
+            "type" : "object",
+            "properties" : {
+              "meta" : {
+                "$ref" : "#/components/schemas/ApiMeta"
+              },
+              "error" : {
+                "$ref" : "#/components/schemas/ApiError"
+              },
+              "result" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ProductView"
+                }
+              }
+            }
+          },
+          "ProductAttrForm" : {
+            "required" : [ "attrType", "displayName" ],
+            "type" : "object",
+            "properties" : {
+              "productId" : {
+                "type" : "integer",
+                "format" : "int64"
+              },
+              "displayName" : {
+                "type" : "string"
+              },
+              "attrType" : {
+                "type" : "string"
+              },
+              "unit" : {
+                "type" : "string"
+              },
+              "attrTypeEnum" : {
+                "type" : "string",
+                "enum" : [ "INT", "DECIMAL", "ENUM" ]
+              }
+            }
+          },
+          "ProductForm" : {
+            "required" : [ "attrs", "displayName" ],
+            "type" : "object",
+            "properties" : {
+              "displayName" : {
+                "type" : "string"
+              },
+              "description" : {
+                "type" : "string"
+              },
+              "attrs" : {
+                "type" : "array",
+                "items" : {
+                  "$ref" : "#/components/schemas/ProductAttrForm"
+                }
+              },
+              "units" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      }
+    }
